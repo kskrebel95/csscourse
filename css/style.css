@@ -1,0 +1,206 @@
+/*
+COLORS:
+
+Light green: #7ed56f
+Medium green: #55c57a
+Dark green: #28b485
+
+*/
+
+*,
+*::before, /*so these psuedo selectors behave as intended.*/
+*::after{
+    margin:0;
+    padding: 0;
+    /* box-sizing: border-box;  this line moved to body because it is bad practice ssince we may want to use differnt box sizing later on*/
+    box-sizing: inherit; /*each element now inherits border-box from its parent*/
+}
+
+/*makes root font size 10 px so when we call rem, 1 rem = 10px*/
+html{
+    /* font-size: 10px; */
+    font-size: 62.5%; /*this line is used because the line above is bad practice since when users change the fontsize the style would not consider it*/
+    /* 16/100 then the result multiply by 10 to get 62.5% (10px) which is 62.5% of the root default 16px fontsize*/
+}
+
+body{
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    /* font-size:16px; commented out because root font size is set above*/
+    line-height: 1.7;
+    color:#777;
+    padding:3rem;
+    box-sizing: border-box; 
+}
+
+.header{
+    height:95vh; /*makes the height of this element 95% of the viewport*/
+    
+    background-image: linear-gradient( /*creates gradient on color*/
+        to right bottom, /*direction of gradient*/
+        hsla(111, 55%, 64%, 0.801), /*start color of gradient (made see through for img underneath)*/
+        hsla(160, 64%, 43%, 0.801)), /*end color of gradient (made see through for img underneath)*/
+         url(../img/hero.jpg);
+          /*goes up one folder since we are in css folder then into img folder*/
+    
+    background-size: cover; /*whatever the size of the viewport , it will try to fit the element*/
+    
+    background-position: top; /*top of image stays relative to resizing page (crops bottom out when changing)*/
+
+     clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%); /*clips shape of the image you want visible using coordinates (starting top left) */
+    position: relative;
+}
+
+.header__logo-box{
+    position:absolute;
+    top:4rem;
+    left:4rem;
+}
+
+.header__logo{
+    height:3.5rem;
+}
+
+/*can use the same animation in mutiple places*/
+/* .logo:hover{
+    
+    animation: moveInRight 1s ease-out;
+} */
+
+.header__text-box{  
+    position: absolute;
+    top:40%; /*in relation to parent*/
+    left:50%; /*in relation to parent*/
+    transform: translate(-50%, -50%); /*in relation to element (-50% left and -50% top)*/
+    text-align:center; /*center all text (discover btn)*/
+}
+
+.heading-primary{
+    color: white;
+    text-transform: uppercase;
+
+    backface-visibility: hidden; /*to fix shaking of animation*/
+    margin-bottom: 6rem;
+}
+
+.heading-primary--main{
+    display: block; /*a block lvl element always starts on a new line and takes up the entire width available*/
+    font-size: 6rem;
+    font-weight: 400;
+    letter-spacing: 3.5rem;
+
+    animation-name: moveInLeft; 
+    animation-duration: 1s;
+    animation-timing-function: ease-out; /*fast at begining of animation then slow*/
+
+    /* animation-delay:3s ; delay in time before starting animation */
+    /* animation-iteration-count: 3; will make animation happen 3 times */
+
+}
+
+.heading-primary--sub{
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 1.75rem;
+    animation: moveInRight 1s ease-out;
+}
+
+@keyframes moveInLeft{
+    /*each % signifies a point of animation (0 is start 100 is end)(*/
+    0%{
+        opacity: 0; /*makes invisible*/
+        transform:translateX(-10rem); /*starts 100px left (x axis)*/
+    }   
+    80%{
+        transform: translateX(1rem);
+    }
+
+    100%{
+        opacity: 1;
+        transform: translate(0);
+    }
+}
+
+@keyframes moveInRight{
+    /*each % signifies a point of animation (0 is start 100 is end)(*/
+    0%{
+        opacity: 0; /*makes invisible*/
+        transform:translateX(10rem); /*starts 100px left (x axis)*/
+    }   
+    80%{
+        transform: translateX(-1rem);
+    }
+
+    100%{
+        opacity: 1;
+        transform: translate(0);
+    }
+}
+@keyframes moveInBottom{
+    /*each % signifies a point of animation (0 is start 100 is end)(*/
+    0%{
+        opacity: 0; /*makes invisible*/
+        transform:translateY(3rem);
+    }   
+    100%{
+        opacity: 1;
+        transform: translate(0);
+    }
+}
+
+.btn:link, 
+.btn:visited{
+    text-transform: uppercase;
+    text-decoration: none;
+    padding:1.5rem 4rem;
+    display: inline-block; /*allows it to work as if a normal box element since the padding makes it cover headers words above*/
+    border-radius: 10rem;
+    transition: all .2s; /*on all states transitions take .2s*/
+    position: relative;
+    font-size: 1.6rem;
+}
+
+.btn:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 1rem 2rem rgba(0,0,0,.2);
+}
+
+.btn:active{
+    transform: translateY(-1px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.2);
+}/*when clicked*/
+
+.btn--white{
+    background-color: white;
+    color:#777;
+
+}
+
+.btn::after{
+    content: "";/*must specify(even if blank)*/
+    display: inline-block;
+    height: 100%; /*100%$ of original btn*/
+    width: 100%;
+    border-radius: 10rem;
+    position: absolute; /*relative to first btn*/
+    top:0;
+    left:0;
+    z-index: -1;
+    transition: all .4s; /*so hover after scale takes .4s*/
+}
+
+.btn--white::after{
+    background-color: white;
+}
+
+.btn:hover::after{
+    /* transform: scale(1.5); */
+    transform: scaleX(1.4) scaleY(1.6);
+    opacity:0; /*fades out and make 2nd btn invisible*/
+}
+.btn--animated{
+    animation: moveInBottom .5s ease-out .75s; /*name ,duration, timing, delay*/
+    animation-fill-mode: backwards; /*will apply styles from 0% before the animation starts*/
+}
+
